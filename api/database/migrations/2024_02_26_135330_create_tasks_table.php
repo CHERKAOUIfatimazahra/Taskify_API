@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->enum("status", ["not completed", "completed"])->default("not completed");
+            $table->foreignId("user_id")->constrained("users");
             $table->timestamps();
         });
     }

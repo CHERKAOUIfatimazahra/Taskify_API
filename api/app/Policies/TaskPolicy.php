@@ -11,9 +11,9 @@ class TaskPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -21,15 +21,15 @@ class TaskPolicy
      */
     public function view(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -37,7 +37,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -61,6 +61,6 @@ class TaskPolicy
      */
     public function forceDelete(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id;
     }
 }

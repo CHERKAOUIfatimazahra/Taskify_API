@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
@@ -16,6 +17,7 @@ class TaskController extends Controller
     public function index()
     {
         $task = Task::all();
+        $this->authorize('view', $task);
         return TaskResource::collection($task);
     }
 
@@ -34,6 +36,7 @@ class TaskController extends Controller
         }
 
         $task = Task::create();
+        $this->authorize('view', $task);
         return new TaskResource($task);
     }
 
