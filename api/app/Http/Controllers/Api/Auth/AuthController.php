@@ -13,9 +13,9 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validate = validator($request->all(),[
-            'name' => ['required', 'min:3'],
-            'email' => ['required', 'email:unique,users,email'],
-            'password' => 'required|min:6'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
         
         if($validate->fails()){
@@ -32,7 +32,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        $token = $user->createToken()->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             "status"=> true
@@ -43,15 +43,38 @@ class AuthController extends Controller
         ]);
     }
 
-    
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|string|email',
+    //         'password' => 'required|string',
+    //     ]);
+    //     $credentials = $request->only('email', 'password');
+    //     $token = Auth::attempt($credentials);
+        
+    //     if (!$token) {
+    //         return response()->json([
+    //             'message' => 'Unauthorized',
+    //         ], 401);
+    //     }
 
-    public function logout()
-    {
-        Auth::logout();
-        return response()->json([
-            'message' => 'Successfully logged out',
-        ]);
-    }
+    //     $user = Auth::user();
+    //     return response()->json([
+    //         'user' => $user,
+    //         'authorization' => [
+    //             'token' => $token,
+    //             'type' => 'bearer',
+    //         ]
+    //     ]);
+    // }
+
+    // public function logout()
+    // {
+    //     Auth::logout();
+    //     return response()->json([
+    //         'message' => 'Successfully logged out',
+    //     ]);
+    // }
 
    
 
