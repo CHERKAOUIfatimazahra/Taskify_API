@@ -8,12 +8,17 @@ use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    function __construct(){
+        
+        $this->middleware('auth:sanctum');
+    }
     public function index()
     {
         $task = Task::all();
@@ -32,10 +37,16 @@ class TaskController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['error' => $validator->errors(), 'Validation Error']);
+            return response(['error' => $validator->errors(), 'message' => 'Validation Error']);
         }
+        $userId = Auth::id();
+        
+        $task = Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => $userId
+        ]);
 
-        $task = Task::create();
         $this->authorize('view', $task);
         return new TaskResource($task);
     }
