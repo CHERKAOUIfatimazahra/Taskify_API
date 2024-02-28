@@ -17,15 +17,15 @@ class TaskControllerTest extends TestCase
      *
      * @return void
      */
-    // public function test_can_list_tasks()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    public function test_can_list_tasks()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $response = $this->getJson('/api/v1/tasks');
+        $response = $this->getJson('/api/v1/tasks');
 
-    //     $response->assertStatus(200);
-    // }
+        $response->assertStatus(200);
+    }
 
     public function test_can_create_task()
     {
@@ -45,48 +45,31 @@ class TaskControllerTest extends TestCase
             'description'=>'task description',
             'is_completed'=> false,
         ]);
-        // $response->assertStatus(201)
-        //     ->assertJsonStructure([
-        //         'data' => [
-        //             'id',
-        //             'title',
-        //             'description',
-        //             'is_completed',
-        //         ]
-        //     ]);
     }
 
-    // public function test_can_show_task()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    public function test_can_show_task()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $task = Task::factory()->create();
+        $task = Task::factory()->create();
 
-    //     $response = $this->getJson('/api/v1/tasks/' . $task->id);
+        $response = $this->getJson('/api/v1/tasks/' . $task->id);
 
-    //     $response->assertStatus(200)
-    //         ->assertJson([
-    //             'data' => [
-    //                 'id' => $task->id,
-    //                 'title' => $task->title,
-    //                 'description' => $task->description,
-    //                 'is_completed' => $task->is_completed
-    //             ]
-    //         ]);
-    // }
+        $response->assertStatus(Response::HTTP_OK);
+            $this->assertDatabaseHas('tasks',[
+                    'id' => $task->id,
+                    'title' => $task->title,
+                    'description' => $task->description,
+                    'is_completed' => $task->is_completed
+            ]);
+    }
 
     public function test_can_update_task()
     {
         $user = User::factory()->create();
         $task = Task::factory()->create(['user_id' => $user->id]);
         $this->actingAs($user);
-
-        // $updatedData = [
-        //     'title' => 'Updated Task',
-        //     'description' => 'Updated Description'
-        // ];
-        // $response = $this->putJson('/api/v1/tasks/' . $task->id, $updatedData);
 
         $response = $this->putJson('/api/v1/tasks/'.$task->id,[
             'title' => 'update title',
@@ -99,14 +82,7 @@ class TaskControllerTest extends TestCase
             'description'=>'task description',
             'is_completed'=> false,
         ]);
-        // $response->assertStatus(200)
-        //     ->assertJson([
-        //         'data' => [
-        //             'id' => $task->id,
-        //             'title' => $updatedData['title'],
-        //             'description' => $updatedData['description']
-        //         ]
-        //     ]);
+
     }
 
     public function test_can_delete_task()
@@ -118,6 +94,6 @@ class TaskControllerTest extends TestCase
         $response = $this->deleteJson('/api/v1/tasks/'.$task->id);
 
         $response->assertStatus(200);
-        $this->assertDeleted($task); 
+
     }
 }

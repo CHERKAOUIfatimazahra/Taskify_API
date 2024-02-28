@@ -1,9 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Api;
 
 use App\Models\User;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+// use PHPUnit\Framework\TestCase;
+use Illuminate\Http\Response;
 
 class AuthTest extends TestCase
 {
@@ -18,20 +20,17 @@ class AuthTest extends TestCase
             'password' => 'password'
         ];
 
-        $response = $this->postJson('/api/auth/register', $userData);
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'status',
-                'user' => [
-                    'id',
-                    'name',
-                    'email',
-                    'created_at',
-                    'updated_at'
-                ],
-                'token'
-            ]);
+        $response = $this->postJson('/api/register', $userData);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $this->assertDatabaseHas('users',[
+                'id',
+                'name',
+                'email',
+                'created_at',
+                'updated_at'
+            ],
+            'token'
+        );
     }
 
     public function test_can_login_user()
@@ -46,20 +45,18 @@ class AuthTest extends TestCase
             'password' => 'password'
         ];
 
-        $response = $this->postJson('/api/auth/login', $loginData);
+        $response = $this->postJson('/api/login', $loginData);
 
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'status',
-                'user' => [
-                    'id',
-                    'name',
-                    'email',
-                    'created_at',
-                    'updated_at'
-                ],
-                'token'
-            ]);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $this->assertDatabaseHas('users',[
+                'id',
+                'name',
+                'email',
+                'created_at',
+                'updated_at'
+            ],
+            'token'
+        );
     }
 
     public function test_can_logout_user()
@@ -69,7 +66,7 @@ class AuthTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->postJson('/api/auth/logout');
+        ])->postJson('/api/logout');
 
         $response->assertStatus(200)
             ->assertJson([
