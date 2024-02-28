@@ -12,38 +12,42 @@ class ComplateTaskController extends Controller
     /**
      * Mark a task as completed.
      *
-     * @SWG\Patch(
+     * @OA\Patch(
      *     path="/api/v1/tasks/{task}/complete",
      *     tags={"Tasks"},
      *     summary="Mark a task as completed",
      *     description="Mark a task as completed by updating the 'is_completed' field.",
-     *     @SWG\Parameter(
+     *     @OA\Parameter(
      *         name="task",
      *         in="path",
-     *         type="integer",
+     *         description="ID of the task to mark as completed",
      *         required=true,
-     *         description="ID of the task to mark as completed"
-     *     ),
-     *     @SWG\Parameter(
-     *         name="body",
-     *         in="body",
-     *         required=true,
-     *         @SWG\Schema(
-     *             type="object",
-     *             @SWG\Property(property="is_completed", type="boolean", example=true),
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(property="is_completed", type="boolean", example=true),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
      *         response=200,
      *         description="Task marked as completed successfully",
-     *         @SWG\Schema(ref="#/definitions/Task")
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=404,
      *         description="Task not found"
      *     )
      * )
      */
+
     public function __invoke(Request $request, Task $task)
     {
         $task->is_completed = $request->is_completed;

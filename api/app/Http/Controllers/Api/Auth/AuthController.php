@@ -13,33 +13,33 @@ class AuthController extends Controller
     /**
      * Register a new user.
      *
-     * @SWG\Post(
+     * @OA\Post(
      *     path="/api/auth/register",
      *     tags={"Authentication"},
      *     summary="Register a new user",
      *     description="Register a new user with name, email, and password.",
-     *     @SWG\Parameter(
-     *         name="body",
-     *         in="body",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @SWG\Schema(
-     *             type="object",
-     *             @SWG\Property(property="name", type="string", example="John Doe"),
-     *             @SWG\Property(property="email", type="string", example="john@example.com"),
-     *             @SWG\Property(property="password", type="string", example="password"),
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", example="john@example.com"),
+     *                 @OA\Property(property="password", type="string", example="password"),
+     *             )
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=200,
      *         description="User registered successfully",
-     *         @SWG\Schema(
+     *         @OA\JsonContent(
      *             type="object",
-     *             @SWG\Property(property="status", type="boolean", example=true),
-     *             @SWG\Property(property="user", ref="#/definitions/User"),
-     *             @SWG\Property(property="token", type="string", example="JWT_TOKEN"),
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="token", type="string", example="JWT_TOKEN"),
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=400,
      *         description="Validation error or user already exists"
      *     )
@@ -80,32 +80,32 @@ class AuthController extends Controller
     /**
      * Login a user.
      *
-     * @SWG\Post(
+     * @OA\Post(
      *     path="/api/auth/login",
      *     tags={"Authentication"},
      *     summary="Login a user",
      *     description="Login a user with email and password.",
-     *     @SWG\Parameter(
-     *         name="body",
-     *         in="body",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @SWG\Schema(
-     *             type="object",
-     *             @SWG\Property(property="email", type="string", example="john@example.com"),
-     *             @SWG\Property(property="password", type="string", example="password"),
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="password", type="string", example="password"),
+     *             )
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=200,
      *         description="User logged in successfully",
-     *         @SWG\Schema(
+     *         @OA\JsonContent(
      *             type="object",
-     *             @SWG\Property(property="status", type="boolean", example=true),
-     *             @SWG\Property(property="user", ref="#/definitions/User"),
-     *             @SWG\Property(property="token", type="string", example="JWT_TOKEN"),
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="token", type="string", example="JWT_TOKEN"),
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=400,
      *         description="Validation error or user not found"
      *     )
@@ -150,26 +150,27 @@ class AuthController extends Controller
 /**
      * Logout a user.
      *
-     * @SWG\Post(
+     * @OA\Post(
      *     path="/api/auth/logout",
      *     tags={"Authentication"},
      *     summary="Logout a user",
      *     description="Logout the currently authenticated user.",
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=200,
      *         description="User logged out successfully",
-     *         @SWG\Schema(
+     *         @OA\JsonContent(
      *             type="object",
-     *             @SWG\Property(property="status", type="boolean", example=true),
-     *             @SWG\Property(property="message", type="string", example="User successfully logged out"),
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="User successfully logged out"),
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=401,
      *         description="Unauthenticated"
      *     )
      * )
      */
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -178,4 +179,5 @@ class AuthController extends Controller
             'message' => "user successflly logged out"
         ]);
     }
+
 }
