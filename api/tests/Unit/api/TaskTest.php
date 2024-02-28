@@ -93,7 +93,11 @@ class TaskControllerTest extends TestCase
 
         $response = $this->deleteJson('/api/v1/tasks/'.$task->id);
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+                    ->assertJson([
+                                'status' => true,
+                                'message' => 'task deleted with success',
+        ]);
 
     }
 }
