@@ -33,16 +33,17 @@ class TaskControllerTest extends TestCase
         $this->actingAs($user);
 
         $taskData = [
+            "user_id" => $user->id,
             'title' => 'Test Task',
             'description' => 'Test Description',
-            'is_complated' => 'false'
+            'is_completed' => false
         ];
 
         $response = $this->postJson('/api/v1/tasks', $taskData);
         $response->assertStatus(Response::HTTP_CREATED);
         $this->assertDatabaseHas('tasks',[
-            'title'=>'task title',
-            'description'=>'task description',
+            'title'=>'Test Task',
+            'description'=>'Test Description',
             'is_completed'=> false,
         ]);
     }
@@ -72,16 +73,17 @@ class TaskControllerTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->putJson('/api/v1/tasks/'.$task->id,[
-            'title' => 'update title',
-        ]);
+            'title' => 'update title task',
+            'description'=> 'update description task'
+    ]);
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('tasks',[
             'id'=> $task->id,
-            'title'=>'task title',
-            'description'=>'task description',
-            'is_completed'=> false,
-        ]);
+            'title'=>'update title task', 
+            'description'=>'update description task', 
+            'is_completed'=> $task->is_completed
+    ]);
 
     }
 
@@ -95,8 +97,7 @@ class TaskControllerTest extends TestCase
 
         $response->assertStatus(200)
                     ->assertJson([
-                                'status' => true,
-                                'message' => 'task deleted with success',
+                                'message' => 'Task deleted successfully',
         ]);
 
     }

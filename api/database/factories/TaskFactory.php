@@ -19,7 +19,7 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->title(),
             'description'=>fake()->text(),
-            'is_completed' => rand(0, 1)
+            'is_completed' => fake()->boolean()
         ];
     }
 }

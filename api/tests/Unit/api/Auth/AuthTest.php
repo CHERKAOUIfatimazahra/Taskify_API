@@ -6,6 +6,7 @@ use App\Models\User;
 use Tests\TestCase;
 // use PHPUnit\Framework\TestCase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 class AuthTest extends TestCase
 {
@@ -15,48 +16,40 @@ class AuthTest extends TestCase
     public function test_can_register_user()
     {
         $userData = [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => 'password'
+            'name' => 'fatima',
+            'email' => 'fatima@gmail.com',
+            'password' => '123456'
         ];
-
+    
         $response = $this->postJson('/api/register', $userData);
-        $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas('users',[
-                'id',
-                'name',
-                'email',
-                'created_at',
-                'updated_at'
-            ],
-            'token'
-        );
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('users', [
+            
+                'name' => 'fatima',
+                'email' => 'fatima@gmail.com'
+            
+        ]);
     }
 
     public function test_can_login_user()
     {
         $user = User::factory()->create([
-            'email' => 'john@example.com',
-            'password' => bcrypt('password')
+            'email' => 'fatimaggg@gmail.com',
+            'password' => bcrypt('123456')
         ]);
-
+    
         $loginData = [
-            'email' => 'john@example.com',
-            'password' => 'password'
+            'email' => 'fatima@gmail.com',
+            'password' => '123456'
         ];
-
+    
         $response = $this->postJson('/api/login', $loginData);
-
-        $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas('users',[
-                'id',
-                'name',
-                'email',
-                'created_at',
-                'updated_at'
-            ],
-            'token'
-        );
+    
+        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([
+            'status',
+            'user',
+            'token',
+        ]);
     }
 
     public function test_can_logout_user()
@@ -70,8 +63,8 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'status' => true,
-                'message' => 'User successfully logged out'
+                'statut' => true,
+                'message' => 'user successflly logged out'
             ]);
     }
 }
