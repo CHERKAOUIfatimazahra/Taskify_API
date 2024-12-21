@@ -56,5 +56,4 @@ L'objectif est de fournir une API robuste, fiable et bien documentée, tout en m
    git clone https://github.com/CHERKAOUIfatimazahra/Taskify_API.git
    
 #### documentation API :
-    ```bash
 https://documenter.getpostman.com/view/33203681/2sA2rFT19K
